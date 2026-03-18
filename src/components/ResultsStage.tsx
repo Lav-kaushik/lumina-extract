@@ -54,51 +54,62 @@ const ResultsStage = ({ data, additionalData, stage, onExtractMore, onStartOver 
         )}
       </div>
 
-      {/* Core extracted data */}
-      <section>
-        <h3 className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-          <Database className="w-3.5 h-3.5" /> Core Extracted Entities
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {Object.entries(data.extracted_data).map(([k, v]) => (
-            <DataField key={k} label={k} value={v} />
-          ))}
-        </div>
-      </section>
+      {/* Stage 2: Initial extraction results */}
+      {stage === 2 && (
+        <>
+          <section>
+            <div className="p-[1px] rounded-2xl bg-gradient-to-r from-primary/30 to-accent/30">
+              <div className="bg-background rounded-[15px] p-6">
+                <h3 className="text-[11px] font-bold text-primary uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                  <Database className="w-3.5 h-3.5" /> Core Extracted Entities
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {Object.entries(data.extracted_data).map(([k, v]) => (
+                    <DataField key={k} label={k} value={v} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
 
-      {/* AI suggestions */}
-      <section>
-        <h3 className="text-[11px] font-bold text-primary uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5" /> AI Suggested Context
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {Object.entries(data.suggested_additional_data).map(([k, v]) => (
-            <DataField key={k} label={k} value={v} isAiSuggested />
-          ))}
-        </div>
-      </section>
+          <section>
+            <div className="p-[1px] rounded-2xl bg-gradient-to-r from-primary/20 to-accent/20">
+              <div className="bg-background rounded-[15px] p-6">
+                <h3 className="text-[11px] font-bold text-primary uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5" /> AI Suggested Context
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {Object.entries(data.suggested_additional_data).map(([k, v]) => (
+                    <DataField key={k} label={k} value={v} isAiSuggested />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
 
-      {/* Schema template accordion */}
-      <section>
-        <button
-          onClick={() => setShowTemplate(!showTemplate)}
-          className="flex items-center gap-2 text-[11px] font-bold text-muted-foreground uppercase tracking-[0.2em] hover:text-foreground transition-colors"
-        >
-          <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showTemplate ? 'rotate-180' : ''}`} />
-          View Schema Template
-        </button>
-        {showTemplate && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="mt-3 bg-muted/30 rounded-xl p-4 ring-surface overflow-hidden"
-          >
-            <pre className="text-xs font-mono text-muted-foreground overflow-x-auto">
-              {JSON.stringify(data.template, null, 2)}
-            </pre>
-          </motion.div>
-        )}
-      </section>
+          <section>
+            <button
+              onClick={() => setShowTemplate(!showTemplate)}
+              className="flex items-center gap-2 text-[11px] font-bold text-muted-foreground uppercase tracking-[0.2em] hover:text-foreground transition-colors"
+            >
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showTemplate ? 'rotate-180' : ''}`} />
+              View Schema Template
+            </button>
+            {showTemplate && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="mt-3 bg-muted/30 rounded-xl p-4 ring-surface overflow-hidden"
+              >
+                <pre className="text-xs font-mono text-muted-foreground overflow-x-auto">
+                  {JSON.stringify(data.template, null, 2)}
+                </pre>
+              </motion.div>
+            )}
+          </section>
+        </>
+      )
+      }
 
       {/* Deep extraction results */}
       {stage === 3 && additionalData && (
