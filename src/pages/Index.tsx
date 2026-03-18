@@ -113,6 +113,14 @@ const Index = () => {
     setFileName(null);
   }, []);
 
+  const handleNavigate = useCallback((s: Stage) => {
+    if (s === 1) {
+      handleStartOver();
+    } else {
+      setStage(s);
+    }
+  }, [handleStartOver]);
+
   return (
     <div className="flex h-screen w-full bg-background text-foreground overflow-hidden">
       {/* Main workspace */}
