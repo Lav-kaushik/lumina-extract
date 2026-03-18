@@ -17,7 +17,7 @@ const StageFooter = ({ stage, onNavigate }: { stage: Stage; onNavigate?: (s: Sta
             }`}
           >
             {s}
-          </div>
+          </button>
           <span
             className={`text-[11px] font-bold uppercase tracking-[0.15em] ${
               stage >= s ? 'text-foreground' : 'text-muted-foreground'
