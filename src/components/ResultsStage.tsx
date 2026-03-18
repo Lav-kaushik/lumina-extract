@@ -109,6 +109,7 @@ const ResultsStage = ({ data, additionalData, stage, onExtractMore, onStartOver 
           </section>
         </>
       )
+      }
 
       {/* Deep extraction results */}
       {stage === 3 && additionalData && (
