@@ -160,7 +160,7 @@ const Index = () => {
           </AnimatePresence>
         </div>
 
-        <StageFooter stage={stage} />
+        <StageFooter stage={stage} onNavigate={handleNavigate} />
       </main>
 
       {/* Document viewer */}
