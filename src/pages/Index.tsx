@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Database, FileText } from 'lucide-react';
+import { toast } from 'sonner';
 import UploadStage from '@/components/UploadStage';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ResultsStage from '@/components/ResultsStage';
@@ -22,7 +23,7 @@ interface ExtractionData {
 const Index = () => {
   const [stage, setStage] = useState<Stage>(1);
   const [loading, setLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState('Processing Neural Layers...');
+  const [loadingMessage, setLoadingMessage] = useState('Processing...');
   const [data, setData] = useState<ExtractionData | null>(null);
   const [additionalData, setAdditionalData] = useState<Record<string, any> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,24 +52,7 @@ const Index = () => {
       setData(result);
       setStage(2);
     } catch {
-      // Fallback demo data for when backend is unavailable
-      setData({
-        thread_id: 'th_92834',
-        file_name: file.name,
-        extracted_data: {
-          invoice_id: 'INV-2024-001',
-          date: '2024-03-15',
-          total_amount: 1250.5,
-          vendor: 'Cyberdyne Systems',
-        },
-        suggested_additional_data: {
-          tax_id: '99-28374',
-          payment_terms: 'Net 30',
-        },
-        template: { invoice_id: 'str', total_amount: 'float' },
-        confidence: 0.94,
-      });
-      setStage(2);
+      toast.error('Backend unavailable. Please ensure the extraction service is running.');
     } finally {
       setLoading(false);
     }
@@ -93,15 +77,11 @@ const Index = () => {
       if (!res.ok) throw new Error('Deep extraction failed');
       const result = await res.json();
       setAdditionalData(result.extracted_additional_data);
+      setStage(3);
     } catch {
-      // Fallback demo
-      setAdditionalData({
-        line_items: ['Processor Unit', 'Heatsink'],
-        shipping_address: '123 Tech Plaza, San Francisco',
-      });
+      toast.error('Deep extraction failed. Please try again.');
     } finally {
       setLoading(false);
-      setStage(3);
     }
   }, [data]);
 
@@ -113,25 +93,15 @@ const Index = () => {
     setFileName(null);
   }, []);
 
-  const handleNavigate = useCallback((s: Stage) => {
-    if (s === 1) {
-      handleStartOver();
-    } else {
-      setStage(s);
-    }
-  }, [handleStartOver]);
-
   return (
     <div className="flex h-screen w-full bg-background text-foreground overflow-hidden">
-      {/* Main workspace */}
       <main className="flex-1 flex flex-col min-w-0 relative">
-        {/* Header */}
-        <header className="h-16 border-b border-muted flex items-center px-8 justify-between glass z-10 shrink-0">
+        <header className="h-16 border-b border-border flex items-center px-8 justify-between glass z-10 shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center glow-indigo">
               <Database className="w-5 h-5 text-primary-foreground" />
             </div>
-            <h1 className="font-bold tracking-tight text-lg">
+            <h1 className="font-bold tracking-tight text-lg text-foreground">
               Synapse <span className="text-muted-foreground font-medium">HITL</span>
             </h1>
           </div>
@@ -143,7 +113,6 @@ const Index = () => {
           )}
         </header>
 
-        {/* Content area */}
         <div className="flex-1 overflow-y-auto p-8 pb-32">
           <AnimatePresence mode="wait">
             {!loading && stage === 1 && <UploadStage onFileSelected={handleFileUpload} />}
@@ -160,10 +129,9 @@ const Index = () => {
           </AnimatePresence>
         </div>
 
-        <StageFooter stage={stage} onNavigate={handleNavigate} />
+        <StageFooter stage={stage} />
       </main>
 
-      {/* Document viewer */}
       <DocumentViewer
         fileUrl={fileUrl}
         fileName={fileName}
@@ -171,7 +139,6 @@ const Index = () => {
         onResize={setPaneWidth}
       />
 
-      {/* Extract more modal */}
       <ExtractModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -58,12 +58,12 @@ const ResultsStage = ({ data, additionalData, stage, onExtractMore, onStartOver 
       {stage === 2 && (
         <>
           <section>
-            <div className="p-[1px] rounded-2xl bg-gradient-to-r from-primary/30 to-accent/30">
+            <div className="p-[1px] rounded-2xl bg-gradient-to-r from-primary/20 to-accent/20">
               <div className="bg-background rounded-[15px] p-6">
-                <h3 className="text-[11px] font-bold text-primary uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                  <Database className="w-3.5 h-3.5" /> Core Extracted Entities
+                <h3 className="text-sm font-bold text-primary uppercase tracking-wide mb-4 flex items-center gap-2">
+                  <Database className="w-4 h-4" /> Core Extracted Entities
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-2">
                   {Object.entries(data.extracted_data).map(([k, v]) => (
                     <DataField key={k} label={k} value={v} />
                   ))}
@@ -73,12 +73,12 @@ const ResultsStage = ({ data, additionalData, stage, onExtractMore, onStartOver 
           </section>
 
           <section>
-            <div className="p-[1px] rounded-2xl bg-gradient-to-r from-primary/20 to-accent/20">
+            <div className="p-[1px] rounded-2xl bg-gradient-to-r from-primary/15 to-accent/15">
               <div className="bg-background rounded-[15px] p-6">
-                <h3 className="text-[11px] font-bold text-primary uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5" /> AI Suggested Context
+                <h3 className="text-sm font-bold text-primary uppercase tracking-wide mb-4 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" /> AI Suggested Context
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-2">
                   {Object.entries(data.suggested_additional_data).map(([k, v]) => (
                     <DataField key={k} label={k} value={v} isAiSuggested />
                   ))}
@@ -90,26 +90,27 @@ const ResultsStage = ({ data, additionalData, stage, onExtractMore, onStartOver 
           <section>
             <button
               onClick={() => setShowTemplate(!showTemplate)}
-              className="flex items-center gap-2 text-[11px] font-bold text-muted-foreground uppercase tracking-[0.2em] hover:text-foreground transition-colors"
+              className="flex items-center gap-2 text-sm font-bold text-muted-foreground uppercase tracking-wide hover:text-foreground transition-colors"
             >
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showTemplate ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showTemplate ? 'rotate-180' : ''}`} />
               View Schema Template
             </button>
             {showTemplate && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
-                className="mt-3 bg-muted/30 rounded-xl p-4 ring-surface overflow-hidden"
+                className="mt-3 bg-muted/50 rounded-xl p-4 ring-surface overflow-hidden"
               >
-                <pre className="text-xs font-mono text-muted-foreground overflow-x-auto">
-                  {JSON.stringify(data.template, null, 2)}
-                </pre>
+                <div className="grid grid-cols-1 gap-2">
+                  {Object.entries(data.template).map(([k, v]) => (
+                    <DataField key={k} label={k} value={v} />
+                  ))}
+                </div>
               </motion.div>
             )}
           </section>
         </>
-      )
-      }
+      )}
 
       {/* Deep extraction results */}
       {stage === 3 && additionalData && (
@@ -118,12 +119,12 @@ const ResultsStage = ({ data, additionalData, stage, onExtractMore, onStartOver 
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: [0.2, 0, 0, 1] }}
         >
-          <div className="p-[1px] rounded-2xl bg-gradient-to-r from-success/30 to-primary/30">
+          <div className="p-[1px] rounded-2xl bg-gradient-to-r from-success/20 to-primary/20">
             <div className="bg-background rounded-[15px] p-6">
-              <h3 className="text-[11px] font-bold text-success uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Deep Extraction Results
+              <h3 className="text-sm font-bold text-success uppercase tracking-wide mb-4 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4" /> Deep Extraction Results
               </h3>
-              <div className="grid grid-cols-1 gap-3">
+              <div className="grid grid-cols-1 gap-2">
                 {Object.entries(additionalData).map(([k, v]) => (
                   <DataField key={k} label={k} value={v} />
                 ))}
