@@ -87,7 +87,6 @@ const Index = () => {
     setStage(1);
     setData(null);
     setAdditionalData(null);
-    setFileUrl(null);
     setFileName(null);
   }, []);
 
