@@ -93,7 +93,7 @@ const ExtractModal = ({ isOpen, onClose, onSubmit }: ExtractModalProps) => {
                     <select
                       value={field.type}
                       onChange={(e) => updateField(i, 'type', e.target.value)}
-                      className="w-full bg-muted border-0 ring-surface focus:ring-2 focus:ring-primary rounded-xl px-4 py-3 text-sm text-foreground transition-all outline-none appearance-none cursor-pointer"
+                      className="w-full bg-primary/10 border-0 ring-1 ring-primary/20 focus:ring-2 focus:ring-primary rounded-xl px-4 py-3 text-sm text-foreground transition-all outline-none appearance-none cursor-pointer"
                     >
                       {DATA_TYPES.map((t) => (
                         <option key={t} value={t}>{t}</option>
