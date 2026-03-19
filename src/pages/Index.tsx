@@ -27,8 +27,6 @@ const Index = () => {
   const [data, setData] = useState<ExtractionData | null>(null);
   const [additionalData, setAdditionalData] = useState<Record<string, any> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [paneWidth, setPaneWidth] = useState(450);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
 
   const handleFileUpload = useCallback(async (file: File) => {
