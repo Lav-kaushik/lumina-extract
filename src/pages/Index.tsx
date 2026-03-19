@@ -6,7 +6,7 @@ import UploadStage from '@/components/UploadStage';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ResultsStage from '@/components/ResultsStage';
 import ExtractModal from '@/components/ExtractModal';
-import DocumentViewer from '@/components/DocumentViewer';
+
 import StageFooter from '@/components/StageFooter';
 
 type Stage = 1 | 2 | 3;
