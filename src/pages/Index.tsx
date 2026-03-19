@@ -31,7 +31,7 @@ const Index = () => {
 
   const handleFileUpload = useCallback(async (file: File) => {
     setFileName(file.name);
-    setFileUrl(URL.createObjectURL(file));
+    
     setLoading(true);
     setLoadingMessage('Extracting Document Entities...');
 
