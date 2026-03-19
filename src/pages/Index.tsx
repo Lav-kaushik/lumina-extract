@@ -129,12 +129,6 @@ const Index = () => {
         <StageFooter stage={stage} />
       </main>
 
-      <DocumentViewer
-        fileUrl={fileUrl}
-        fileName={fileName}
-        width={paneWidth}
-        onResize={setPaneWidth}
-      />
 
       <ExtractModal
         isOpen={isModalOpen}
