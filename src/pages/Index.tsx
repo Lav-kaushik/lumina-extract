@@ -6,7 +6,7 @@ import UploadStage from '@/components/UploadStage';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ResultsStage from '@/components/ResultsStage';
 import ExtractModal from '@/components/ExtractModal';
-import DocumentViewer from '@/components/DocumentViewer';
+
 import StageFooter from '@/components/StageFooter';
 
 type Stage = 1 | 2 | 3;
@@ -27,13 +27,11 @@ const Index = () => {
   const [data, setData] = useState<ExtractionData | null>(null);
   const [additionalData, setAdditionalData] = useState<Record<string, any> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [paneWidth, setPaneWidth] = useState(450);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
 
   const handleFileUpload = useCallback(async (file: File) => {
     setFileName(file.name);
-    setFileUrl(URL.createObjectURL(file));
+    
     setLoading(true);
     setLoadingMessage('Extracting Document Entities...');
 
@@ -89,7 +87,6 @@ const Index = () => {
     setStage(1);
     setData(null);
     setAdditionalData(null);
-    setFileUrl(null);
     setFileName(null);
   }, []);
 
@@ -132,12 +129,6 @@ const Index = () => {
         <StageFooter stage={stage} />
       </main>
 
-      <DocumentViewer
-        fileUrl={fileUrl}
-        fileName={fileName}
-        width={paneWidth}
-        onResize={setPaneWidth}
-      />
 
       <ExtractModal
         isOpen={isModalOpen}
