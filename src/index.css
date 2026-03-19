@@ -6,56 +6,56 @@
 
 @layer base {
   :root {
-    --background: 220 20% 4%;
-    --foreground: 210 20% 90%;
+    --background: 0 0% 100%;
+    --foreground: 215 25% 15%;
 
-    --card: 215 20% 9%;
-    --card-foreground: 210 20% 90%;
+    --card: 210 40% 97%;
+    --card-foreground: 215 25% 15%;
 
-    --popover: 215 20% 9%;
-    --popover-foreground: 210 20% 90%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
 
-    --primary: 243 75% 59%;
+    --primary: 210 80% 55%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 215 15% 15%;
-    --secondary-foreground: 210 20% 80%;
+    --secondary: 210 40% 93%;
+    --secondary-foreground: 215 25% 30%;
 
-    --muted: 215 15% 15%;
-    --muted-foreground: 215 15% 45%;
+    --muted: 210 30% 95%;
+    --muted-foreground: 215 15% 50%;
 
-    --accent: 243 75% 59%;
+    --accent: 210 80% 55%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 100% / 0.05;
-    --input: 0 0% 100% / 0.05;
-    --ring: 243 75% 59%;
+    --border: 210 20% 90%;
+    --input: 210 20% 90%;
+    --ring: 210 80% 55%;
 
     --radius: 0.75rem;
 
-    --surface: 215 20% 9%;
-    --surface-hover: 215 20% 12%;
-    --success: 160 60% 45%;
-    --success-foreground: 160 60% 90%;
+    --surface: 210 40% 97%;
+    --surface-hover: 210 40% 93%;
+    --success: 160 60% 40%;
+    --success-foreground: 160 60% 15%;
     --warning: 38 92% 50%;
-    --warning-foreground: 38 92% 90%;
-    --indigo-glow: 243 75% 59%;
+    --warning-foreground: 38 92% 15%;
+    --indigo-glow: 210 80% 55%;
 
-    --shadow-card: 0 0 0 1px rgba(255,255,255,0.05), 0 10px 15px -3px rgba(0,0,0,0.4);
-    --shadow-glow: 0 0 15px rgba(79,70,229,0.4);
-    --shadow-glow-lg: 0 0 30px rgba(79,70,229,0.3);
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-glow: 0 0 15px hsla(210, 80%, 55%, 0.25);
+    --shadow-glow-lg: 0 0 30px hsla(210, 80%, 55%, 0.2);
 
-    --sidebar-background: 215 20% 6%;
-    --sidebar-foreground: 210 20% 80%;
-    --sidebar-primary: 243 75% 59%;
+    --sidebar-background: 210 40% 97%;
+    --sidebar-foreground: 215 25% 30%;
+    --sidebar-primary: 210 80% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 15% 15%;
-    --sidebar-accent-foreground: 210 20% 80%;
-    --sidebar-border: 0 0% 100% / 0.05;
-    --sidebar-ring: 243 75% 59%;
+    --sidebar-accent: 210 40% 93%;
+    --sidebar-accent-foreground: 215 25% 30%;
+    --sidebar-border: 210 20% 90%;
+    --sidebar-ring: 210 80% 55%;
   }
 }
 
@@ -70,7 +70,7 @@
   }
 
   ::selection {
-    background: hsl(243 75% 59% / 0.3);
+    background: hsl(210 80% 55% / 0.2);
   }
 }
 
@@ -93,16 +93,16 @@
   }
 
   .glass {
-    @apply bg-background/80 backdrop-blur-xl;
-    border-bottom: 1px solid hsl(0 0% 100% / 0.05);
+    @apply bg-background/90 backdrop-blur-xl;
+    border-bottom: 1px solid hsl(210 20% 90%);
   }
 
   .ring-surface {
     @apply ring-1;
-    --tw-ring-color: hsl(0 0% 100% / 0.08);
+    --tw-ring-color: hsl(210 20% 90%);
   }
 
   .ring-surface-hover {
-    --tw-ring-color: hsl(243 75% 59% / 0.3);
+    --tw-ring-color: hsl(210 80% 55% / 0.4);
   }
 }
