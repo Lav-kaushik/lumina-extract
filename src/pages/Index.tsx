@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Database, FileText } from 'lucide-react';
 import { toast } from 'sonner';
@@ -6,7 +6,7 @@ import UploadStage from '@/components/UploadStage';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ResultsStage from '@/components/ResultsStage';
 import ExtractModal from '@/components/ExtractModal';
-
+import DocumentViewer from '@/components/DocumentViewer';
 import StageFooter from '@/components/StageFooter';
 
 type Stage = 1 | 2 | 3;
@@ -20,6 +20,8 @@ interface ExtractionData {
   confidence: number;
 }
 
+const DEFAULT_PANEL_WIDTH = () => Math.round(window.innerWidth * 0.33);
+
 const Index = () => {
   const [stage, setStage] = useState<Stage>(1);
   const [loading, setLoading] = useState(false);
@@ -30,9 +32,34 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
 
-  const handleFileUpload = useCallback(async (file: File) => {
+  // PDF preview state
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [panelWidth, setPanelWidth] = useState<number>(DEFAULT_PANEL_WIDTH);
+  const blobUrlRef = useRef<string | null>(null);
+
+  // Revoke blob URL on unmount to avoid memory leaks
+  useEffect(() => {
+    return () => {
+      if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
+    };
+  }, []);
+
+  const openPreview = useCallback((file: File) => {
+    // revoke previous blob if any
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+    }
+    const url = URL.createObjectURL(file);
+    blobUrlRef.current = url;
+    setPdfUrl(url);
     setFileName(file.name);
-    
+    setPanelWidth(DEFAULT_PANEL_WIDTH());
+  }, []);
+
+  const handleFileUpload = useCallback(async (file: File) => {
+    // Open preview immediately — don't wait for extraction
+    openPreview(file);
+
     setLoading(true);
     setLoadingMessage('Extracting Document Entities...');
 
@@ -55,7 +82,7 @@ const Index = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [openPreview]);
 
   const handleDeepExtraction = useCallback(async (requestedFields: Record<string, string>, additionalPrompt: string) => {
     setIsModalOpen(false);
@@ -93,11 +120,20 @@ const Index = () => {
     setAdditionalData(null);
     setAdditionalInfo(null);
     setFileName(null);
+    // Revoke and clear the PDF preview
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
+    }
+    setPdfUrl(null);
   }, []);
+
+  const showPreview = pdfUrl !== null;
 
   return (
     <div className="flex h-screen w-full bg-background text-foreground overflow-hidden">
-      <main className="flex-1 flex flex-col min-w-0 relative">
+      {/* ── Main content column ─────────────────────────────────────────── */}
+      <main className="flex-1 flex flex-col min-w-0 relative overflow-hidden">
         <header className="h-16 border-b border-border flex items-center px-8 justify-between glass z-10 shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center glow-indigo">
@@ -135,6 +171,17 @@ const Index = () => {
         <StageFooter stage={stage} />
       </main>
 
+      {/* ── PDF Preview panel (right side) ──────────────────────────────── */}
+      <AnimatePresence>
+        {showPreview && (
+          <DocumentViewer
+            fileUrl={pdfUrl}
+            fileName={fileName}
+            width={panelWidth}
+            onResize={setPanelWidth}
+          />
+        )}
+      </AnimatePresence>
 
       <ExtractModal
         isOpen={isModalOpen}
