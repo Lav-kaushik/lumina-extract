@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Database, Sparkles, CheckCircle2, Plus, RefreshCcw, ChevronDown } from 'lucide-react';
+import { Database, Sparkles, CheckCircle2, Plus, RefreshCcw, ChevronDown, MessageSquareText } from 'lucide-react';
 import ConfidenceGauge from './ConfidenceGauge';
 import DataField from './DataField';
 import { useState } from 'react';
@@ -16,12 +16,13 @@ interface ExtractionData {
 interface ResultsStageProps {
   data: ExtractionData;
   additionalData: Record<string, any> | null;
+  additionalInfo: string | null;
   stage: 2 | 3;
   onExtractMore: () => void;
   onStartOver: () => void;
 }
 
-const ResultsStage = ({ data, additionalData, stage, onExtractMore, onStartOver }: ResultsStageProps) => {
+const ResultsStage = ({ data, additionalData, additionalInfo, stage, onExtractMore, onStartOver }: ResultsStageProps) => {
   const [showTemplate, setShowTemplate] = useState(false);
 
   return (
@@ -112,7 +113,7 @@ const ResultsStage = ({ data, additionalData, stage, onExtractMore, onStartOver 
         </>
       )}
 
-      {/* Deep extraction results */}
+      {/* Extracted fields card */}
       {stage === 3 && additionalData && (
         <motion.section
           initial={{ opacity: 0, x: 20 }}
@@ -129,6 +130,27 @@ const ResultsStage = ({ data, additionalData, stage, onExtractMore, onStartOver 
                   <DataField key={k} label={k} value={v} />
                 ))}
               </div>
+            </div>
+          </div>
+        </motion.section>
+      )}
+
+      {/* AI summary / additional info card */}
+      {stage === 3 && additionalInfo && (
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.12, ease: [0.2, 0, 0, 1] }}
+        >
+          <div className="p-[1px] rounded-2xl bg-gradient-to-r from-accent/30 to-primary/20">
+            <div className="bg-background rounded-[15px] p-6 space-y-3">
+              <h3 className="text-sm font-bold text-accent-foreground uppercase tracking-wide flex items-center gap-2">
+                <MessageSquareText className="w-4 h-4 text-primary" />
+                AI Analysis
+              </h3>
+              <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap">
+                {additionalInfo}
+              </p>
             </div>
           </div>
         </motion.section>

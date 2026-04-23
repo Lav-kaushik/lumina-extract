@@ -26,6 +26,7 @@ const Index = () => {
   const [loadingMessage, setLoadingMessage] = useState('Processing...');
   const [data, setData] = useState<ExtractionData | null>(null);
   const [additionalData, setAdditionalData] = useState<Record<string, any> | null>(null);
+  const [additionalInfo, setAdditionalInfo] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
 
@@ -56,7 +57,7 @@ const Index = () => {
     }
   }, []);
 
-  const handleDeepExtraction = useCallback(async (requestedFields: Record<string, string>) => {
+  const handleDeepExtraction = useCallback(async (requestedFields: Record<string, string>, additionalPrompt: string) => {
     setIsModalOpen(false);
     setLoading(true);
     setLoadingMessage('Running Deep Extraction...');
@@ -69,12 +70,15 @@ const Index = () => {
           thread_id: data?.thread_id,
           file_name: data?.file_name,
           requested_additional_data_template: requestedFields,
+          additional_prompt: additionalPrompt,
         }),
       });
 
       if (!res.ok) throw new Error('Deep extraction failed');
       const result = await res.json();
       setAdditionalData(result.extracted_additional_data);
+      // note: backend field has a typo — "additonal_extracted_info"
+      setAdditionalInfo(result.additonal_extracted_info ?? null);
       setStage(3);
     } catch {
       toast.error('Deep extraction failed. Please try again.');
@@ -87,6 +91,7 @@ const Index = () => {
     setStage(1);
     setData(null);
     setAdditionalData(null);
+    setAdditionalInfo(null);
     setFileName(null);
   }, []);
 
@@ -118,6 +123,7 @@ const Index = () => {
               <ResultsStage
                 data={data}
                 additionalData={additionalData}
+                additionalInfo={additionalInfo}
                 stage={stage}
                 onExtractMore={() => setIsModalOpen(true)}
                 onStartOver={handleStartOver}
@@ -134,6 +140,7 @@ const Index = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleDeepExtraction}
+        currentTemplate={data?.template ?? {}}
       />
     </div>
   );
